@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import mongoose from "mongoose";
+import { User } from "../models/user.model.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -171,8 +172,8 @@ const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
     {
-      $set: {
-        refreshToken: undefined,
+      $unset: {
+        refreshToken: 1,
       },
     },
     {
